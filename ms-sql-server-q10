@@ -1,0 +1,48 @@
+----------------------------------------------------------------------------------------------
+SELECT city, LEN(city) AS length 
+FROM station 
+WHERE city IN (
+    SELECT TOP 1 city FROM station ORDER BY LEN(city), city ASC
+    UNION
+    SELECT TOP 1 city FROM station ORDER BY LEN(city) DESC, city ASC
+);
+----------------------------------------------------------------------------------------------
+SELECT city, length
+FROM
+(
+    SELECT TOP 1 city, LEN(city) AS length FROM station
+    ORDER BY LEN(city), city
+    UNION
+    SELECT TOP 1 city, LEN(city) AS length FROM station
+    ORDER BY LEN(city) DESC, city
+) AS nin_and_max_letter_asc_city;
+----------------------------------------------------------------------------------------------
+SELECT city, length
+FROM (
+    SELECT TOP 1 city, LEN(city) AS length 
+    FROM station 
+    WHERE LEN(city) = (SELECT MIN(LEN(city)) FROM station) 
+    ORDER BY city ASC
+    UNION
+    SELECT TOP 1 city, LEN(city) AS length 
+    FROM station 
+    WHERE LEN(city) = (SELECT MAX(LEN(city)) FROM station)
+    ORDER BY city DESC
+) AS nin_and_max_letter_asc_city;
+----------------------------------------------------------------------------------------------
+SELECT city, LEN(city) AS length 
+FROM station 
+WHERE city = (
+    SELECT TOP 1 city 
+    FROM station 
+    ORDER BY LEN(city), city ASC
+)
+UNION
+SELECT city, LEN(city) AS length 
+FROM station 
+WHERE city = (
+    SELECT TOP 1 city 
+    FROM station 
+    ORDER BY LEN(city) DESC, city ASC
+);
+----------------------------------------------------------------------------------------------

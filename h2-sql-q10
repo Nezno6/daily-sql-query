@@ -1,0 +1,9 @@
+(SELECT city, CHAR_LENGTH(city) AS length FROM station ORDER BY CHAR_LENGTH(city), city ASC LIMIT 1)
+UNION
+(SELECT city, CHAR_LENGTH(city) AS length FROM station ORDER BY CHAR_LENGTH(city) DESC, city ASC LIMIT 1);
+
+(SELECT city, CHAR_LENGTH(city) AS length FROM station 
+WHERE CHAR_LENGTH(city)=(SELECT MIN(CHAR_LENGTH(city)) FROM station) ORDER BY CHAR_LENGTH(city), city ASC LIMIT 1)
+UNION
+(SELECT city, CHAR_LENGTH(city) AS length FROM station 
+WHERE CHAR_LENGTH(city)=(SELECT MAX(CHAR_LENGTH(city)) FROM station) ORDER BY CHAR_LENGTH(city), city ASC LIMIT 1);
